@@ -1,0 +1,9 @@
+Welcome to MapBenchmark
+
+This is a simple application to test the performance of different map types
+in android. The initial idea was to create an automatic benchmark to test 
+native android maps and html maps. Unfortunately measurements in the 
+html maps are not trivial to implement, so for now manual testing is enabled.
+
+You can add different elements to the map types and manually test their performance
+
