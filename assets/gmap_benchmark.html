@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <style type="text/css">
+          html { height: 100% }
+          body { height: 100%; margin: 0; padding: 0 }
+          #map-canvas { height: 100% }
+        </style>
+        <script type="text/javascript" 
+            src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+        <script type="text/javascript">
+            
+        var map = null;
+        var markersArray = new Array();
+        var linesArray = new Array();
+            
+        function initialize() {
+            var mapOptions = {
+                center: new google.maps.LatLng(-34.397, 150.644),
+                zoom: 8
+            };
+            map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+            
+        }
+        
+        google.maps.event.addDomListener(window, 'load', initialize);
+        
+        
+
+        /**
+         * Adds specified number of markers to the map 
+         *
+         * First calculates the current map bounds and 
+         * generates specified number of random markers
+         * within the visible bounds. Before and after 
+         * adding the markers the timestamps are  
+         * saved in order to measure the time necessary
+         * for adding the markers to the map. The time
+         * is then returned
+         *
+         *  @return int milliseconds to add the specified
+         *              number of markers to the map         
+         */
+        function addMarkers(count) {
+            var latLngArray = generateRandomPositionsInCurrentScreenBounds(count);
+            
+            var startTime = new Date().getTime();
+            for (var i = 0; i < latLngArray.length; i++) {
+                var marker = new google.maps.Marker({
+                    position: latLngArray[i]
+                });
+                marker.setMap(map);
+                markersArray.push(marker);
+            }
+            
+            var endTime = new Date().getTime();
+            return endTime - startTime;
+        }
+        
+        function addLines(count) {
+            
+            var randomPositions = generateRandomPositionsInCurrentScreenBounds(count * 2);
+            
+            for (var i = 0; i < randomPositions.length; i+= 2) {
+                var randomPath = new google.maps.Polyline({
+                    path: [randomPositions[i], randomPositions[i + 1]],
+                    geodesic: true,
+                    strokeColor: '#FF0000',
+                    strokeOpacity: 1.0,
+                    strokeWeight: 1
+                 });
+                 randomPath.setMap(map);
+                 linesArray.push(randomPath);
+            }
+        }
+        
+        
+        function clearMap() {
+            for (var i = 0; i < markersArray.length; i++ ) {
+                markersArray[i].setMap(null);
+            }
+            markersArray.length = 0;
+            
+            for (var i = 0; i < linesArray.length; i++ ) {
+                linesArray[i].setMap(null);
+            }
+            linesArray.length = 0;
+        }
+        
+        /**
+         * Generates specified number of LatLng positions in the current map bounds 
+         */
+        function generateRandomPositionsInCurrentScreenBounds(count) {
+            var bounds = map.getBounds();
+            var northEast = bounds.getNorthEast();
+            var southWest = bounds.getSouthWest();
+            var minLat = Math.min(northEast.lat(), southWest.lat());
+            var maxLat = Math.max(northEast.lat(), southWest.lat());
+            var minLng = Math.min(northEast.lng(), southWest.lng());
+            var maxLng = Math.max(northEast.lng(), southWest.lng());
+            
+            var latDifference = maxLat - minLat;
+            var lngDifference = maxLng - minLng;
+            var latLngArray = new Array();
+            
+            for (var i = 0; i < count; i++) {
+                var lat = minLat + Math.random() * latDifference;
+                var lng = minLng + Math.random() * lngDifference;
+                var latLng = new google.maps.LatLng(lat, lng);
+                latLngArray.push(latLng);                
+            }
+            return latLngArray;
+        }
+        
+        </script>
+    </head>
+  <body>
+    <div id="map-canvas"/>
+  </body>
+</html>
