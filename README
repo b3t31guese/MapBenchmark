@@ -3,7 +3,11 @@ Welcome to MapBenchmark
 This is a simple application to test the performance of different map types
 in android. The initial idea was to create an automatic benchmark to test 
 native android maps and html maps. Unfortunately measurements in the 
-html maps are not trivial to implement, so for now manual testing is enabled.
+html maps are not trivial to implement, so for now only manual testing is enabled.
 
-You can add different elements to the map types and manually test their performance
+For further details see the following questions on StackOverflow:
 
+1. http://stackoverflow.com/questions/20132413/performance-benchmark-of-native-android-map-vs-webview-map-what-parameters-can
+2. http://stackoverflow.com/questions/20482647/measure-complete-time-of-adding-showing-an-array-of-markers-to-google-maps-v3
+
+In this version you can just add only lines and markers to the map.
